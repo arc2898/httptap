@@ -1,0 +1,14 @@
+{
+  "name": "@arc2898/httptap",
+  "version": "1.0.0",
+  "description": "HTTP testing with retry/backoff, formatted JSON diff output.",
+  "main": "dist/cli.js",
+  "bin": { "httptap": "./dist/cli.js" },
+  "scripts": { "build": "tsc", "test": "vitest run" },
+  "keywords": ["http", "api", "testing", "retry", "cli"],
+  "license": "MIT",
+  "author": "ARC <rc002898@gmail.com>",
+  "repository": { "type": "git", "url": "https://github.com/arc2898/httptap" },
+  "dependencies": { "commander": "^12.0.0", "chalk": "^5.4.1" },
+  "devDependencies": { "@types/node": "^22.0.0", "typescript": "^5.7.0", "vitest": "^3.0.0" }
+}
