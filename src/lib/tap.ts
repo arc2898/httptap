@@ -7,6 +7,7 @@ interface Options {
   retries?: string;
   delay?: string;
   headers?: string;
+  output?: string;
 }
 
 async function sleep(ms: number) {
@@ -46,11 +47,20 @@ export async function tap(url: string, options: Options) {
 
     if (result.status >= 200 && result.status < 300) {
       if (result.body) {
-        try {
-          const json = JSON.parse(result.body);
-          console.log(`  Body: ${chalk.gray(JSON.stringify(json, null, 2).substring(0, 500))}`);
-        } catch {
-          console.log(`  Body: ${chalk.gray(result.body.substring(0, 500))}`);
+        if (options.output) {
+          try {
+            require('fs').writeFileSync(options.output, result.body);
+            console.log(`  Body saved to ${options.output}`);
+          } catch (err: any) {
+            console.error(chalk.red(`  Failed to save body to ${options.output}: ${err.message}`));
+          }
+        } else {
+          try {
+            const json = JSON.parse(result.body);
+            console.log(`  Body: ${chalk.gray(JSON.stringify(json, null, 2).substring(0, 500))}`);
+          } catch {
+            console.log(`  Body: ${chalk.gray(result.body.substring(0, 500))}`);
+          }
         }
       }
       return;

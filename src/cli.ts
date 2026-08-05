@@ -16,7 +16,8 @@ program
   .option('-b, --body <body>', 'Request body')
   .option('-H, --headers <headers>', 'Headers (comma-separated)')
   .option('-r, --retries <n>', 'Number of retries', '3')
-  .option('-d, --delay <ms>', 'Initial delay between retries', '1000')
+  .option("-d, --delay <ms>", "Initial delay between retries", "1000")
+  .option("-o, --output <file>", "Save response body to file")
   .action(tap);
 
 program
