@@ -1,39 +1,77 @@
-# HttpTap
+# 🚰 HttpTap
 
-> HTTP testing with retry/backoff, formatted JSON diff output.
+**HttpTap** is a specialized CLI tool for HTTP API testing and debugging. It goes beyond simple `curl` by providing built-in retry logic with exponential backoff, color-coded status reporting, and a powerful side-by-side JSON diffing engine.
 
-## Install
+---
+
+## 🚀 Key Features
+
+- **🔄 Resilient Requests**: Automatic retries with exponential backoff to handle flaky endpoints.
+- **⚖️ Side-by-Side Diff**: Compare responses from two different URLs (e.g., Staging vs. Production) with highlighted JSON differences.
+- **🎨 Visual Status**: Instant feedback with color-coded HTTP status codes and formatted headers.
+- **📦 Body Parsing**: Automatic pretty-printing of JSON response bodies for better readability.
+- **🛠 Header Management**: Simple comma-separated syntax for passing multiple custom headers.
+
+---
+
+## 📦 Installation
+
+Install globally via npm:
 
 ```bash
 npm install -g @arc2898/httptap
 ```
 
-## Usage
+---
+
+## 🛠 Usage Guide
+
+### 1. Basic Request with Retries
+Perform a GET request that automatically retries up to 3 times on failure.
 
 ```bash
-# Simple GET with retry
 httptap tap https://api.example.com/data
-
-# POST with JSON body
-httptap tap https://api.example.com/users -m POST -b '{"name":"Test"}'
-
-# Retry with custom delays
-httptap tap https://api.example.com/data -r 5 -d 2000
-
-# Compare two endpoints
-httptap diff https://api-v1.example.com/data https://api-v2.example.com/data
-
-# Headers
-httptap tap https://api.example.com -H "Authorization:Bearer xxx,Content-Type:application/json"
 ```
 
-## Features
+### 2. Custom POST Request
+Send JSON data with custom headers and a specific retry count.
 
-- **Retry with exponential backoff**: defaults to 3 retries, 1s initial delay
-- **Color-coded status**: green for 2xx, red for 4xx/5xx, yellow for 3xx
-- **JSON body parsing**: pretty-prints JSON responses
-- **Diff mode**: compare two URLs side-by-side
+```bash
+httptap tap https://api.example.com/users \
+  -m POST \
+  -b '{"name":"Manus User"}' \
+  -H "Authorization:Bearer TOKEN,X-Custom:Value" \
+  -r 5 -d 2000
+```
 
-## License
+### 3. Response Diffing
+Compare two endpoints to identify regression or environmental differences.
 
-MIT
+```bash
+httptap diff https://v1.api.com/user/1 https://v2.api.com/user/1
+```
+
+---
+
+## 📋 CLI Options
+
+| Flag | Short | Description | Default |
+| :--- | :--- | :--- | :--- |
+| `--method` | `-m` | HTTP Method (GET, POST, etc.) | `GET` |
+| `--body` | `-b` | Request body string | `None` |
+| `--headers` | `-H` | Comma-separated headers | `None` |
+| `--retries` | `-r` | Number of retry attempts | `3` |
+| `--delay` | `-d` | Initial retry delay in ms | `1000` |
+
+---
+
+## 🤝 Contributing
+
+We welcome all contributions! Please feel free to open issues or submit PRs to enhance HttpTap.
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+*Maintained by [@arc2898](https://github.com/arc2898)*
