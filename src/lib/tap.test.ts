@@ -1,13 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
-import { tap } from './tap';
+import { describe, it, expect } from 'vitest';
+import { tap, diff } from './tap';
 
-// Mock execSync to avoid actual network calls
-vi.mock('child_process', () => ({
-  execSync: vi.fn().mockReturnValue('{"success": true}\n200')
-}));
-
-describe('httptap', () => {
-  it('should be defined', () => {
-    expect(tap).toBeDefined();
+describe('httptap library', () => {
+  it('should export tap and diff functions', () => {
+    expect(typeof tap).toBe('function');
+    expect(typeof diff).toBe('function');
   });
 });
