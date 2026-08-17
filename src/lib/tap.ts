@@ -1,4 +1,5 @@
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
+import { writeFileSync } from 'fs';
 import chalk from 'chalk';
 
 interface Options {
@@ -19,10 +20,22 @@ async function request(url: string, options: Options): Promise<{ status: number;
   const start = Date.now();
 
   try {
-    const cmd = `curl -s -w "\\n%{http_code}" -X ${method} ${options.body ? `-d '${options.body}' ` : ''}${options.headers ? options.headers.split(',').map((h: string) => `-H '${h}'`).join(' ') + ' ' : ''}"${url}"`;
-    const output = execSync(cmd, { encoding: 'utf-8', maxBuffer: 1024 * 1024 });
-    const parts = output.trim().split('\n');
-    const status = parseInt(parts.pop() || '0');
+    const args = ['-s', '-w', '\n%{http_code}', '-X', method];
+    if (options.body !== undefined) args.push('-d', options.body);
+    if (options.headers) {
+      for (const header of options.headers.split(',')) args.push('-H', header);
+    }
+    args.push(url);
+
+    const result = spawnSync('curl', args, {
+      encoding: 'utf-8',
+      maxBuffer: 1024 * 1024,
+    });
+    if (result.error) throw result.error;
+
+    const output = result.stdout.trimEnd();
+    const parts = output.split('\n');
+    const status = parseInt(parts.pop() || '0', 10);
     const body = parts.join('\n');
     return { status, body, time: Date.now() - start };
   } catch (err: any) {
@@ -49,7 +62,7 @@ export async function tap(url: string, options: Options) {
       if (result.body) {
         if (options.output) {
           try {
-            require('fs').writeFileSync(options.output, result.body);
+            writeFileSync(options.output, result.body);
             console.log(`  Body saved to ${options.output}`);
           } catch (err: any) {
             console.error(chalk.red(`  Failed to save body to ${options.output}: ${err.message}`));
