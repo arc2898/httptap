@@ -65,6 +65,18 @@ httptap diff https://v1.api.com/user/1 https://v2.api.com/user/1
 
 ---
 
+## Development
+
+Install dependencies, compile the CLI, and run the library tests locally with:
+
+```bash
+npm ci
+npm run build
+npm test
+```
+
+Use a test endpoint or a local HTTP server when manually checking retry and response-diff behavior.
+
 ## 🤝 Contributing
 
 We welcome all contributions! Please feel free to open issues or submit PRs to enhance HttpTap.
